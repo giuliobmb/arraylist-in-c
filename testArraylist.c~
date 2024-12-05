@@ -1,0 +1,28 @@
+//testArraylist.c starts here
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "arraylist.c"
+
+int main(){
+    printf("\ntesting...");
+
+    printf("testInsert -> %d", testInsert());
+
+}
+
+int testInsert(){
+    ArrayList array =  initialise();
+
+    printf("\narray initialised");
+
+    insert(array, (char*)"ciao");
+    printf("\ninsertion made");
+
+    if(strcmp((char*)get(array, 0), "ciao") == 0)
+        return 1;
+    else
+        return -1;
+}
+
