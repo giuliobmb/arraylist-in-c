@@ -16,6 +16,9 @@ struct _arraylist {
   size_t byte_size;
 };
 
+int reallocate(ArrayList array);
+void printArrayList(ArrayList array);
+
 // initialises an empty arraylist with parameters set to 0
 //
 ArrayList createArray(){ 
@@ -38,11 +41,11 @@ int insert(ArrayList array, void* data){
   
   if(new_data == NULL){ return -2; } // in case is not possible to allocate memory for the new data
   
-  for(int i=0; i < array->size; i++){
-      if(array->data[i] == NULL){
-        continue;
+  for(int i=0, j=0; i < array->size; i++){
+      if(array->data[i] != NULL){
+        new_data[j] = array->data[i];
+        j++;
       }
-      new_data[i] = array->data[i];
     }
   
   free(array->data);
@@ -51,6 +54,7 @@ int insert(ArrayList array, void* data){
   
   array->size++;
   array->data = new_data;
+  array->byte_size = sizeof(void*) * new_size;
  
 }
 
@@ -62,6 +66,51 @@ void* get(ArrayList array, int index){
 
 int size(ArrayList array){
   return array->size;
+}
+
+
+int removeElement(ArrayList array, int index){
+  if(index>= array->size || index<0){ return -1; }
+  array->data[index] = NULL;
+  int r = reallocate(array);
+  if(r != 0) {fprintf(stderr, "\nError [CODE: %d] while reallocating, in remove function", r);}
+  return 0;
+}
+
+int reallocate(ArrayList array){
+  int size = 0;
+  for(int i=0; i < array->size; i++){
+      if(array->data[i] != NULL){
+        size++;
+      }
+    }
+
+  void** new_data = malloc(sizeof(void*) * size); // new pointer of pointers with a new last pointer that will contain new data :)
+  if(new_data == NULL){ return -2; } // in case is not possible to allocate memory for the new data
+  
+  for(int i=0, j=0; i < array->size; i++){
+      if(array->data[i] != NULL){
+        new_data[j] = array->data[i];
+        j++;
+      }
+    }
+  
+  free(array->data);
+  
+  array->data = new_data;
+  array->size = size;
+  return 0;
+}
+
+
+void printar(ArrayList array, char type[]){
+  printf("\nArrayList = {\n");
+  for(int i=0; i < array->size; i++){
+      printf(type, array->data[i]);
+      printf(", ");
+    }
+    printf("\n }");
+
 }
 
 #endif //ARRAYLIST_C_

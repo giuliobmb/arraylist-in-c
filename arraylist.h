@@ -10,13 +10,13 @@ typedef struct _arraylist* ArrayList;
 
 int insert(ArrayList array, void*);
 
-/*
-int remove(ArrayList array, int index);
-*/
+int removeElement(ArrayList array, int index);
 
 void* get(ArrayList array, int index);
 
 int size(ArrayList array);
+
+void printar(ArrayList array, char type[]);
 
 #endif //ARRAYLIST_H
 
